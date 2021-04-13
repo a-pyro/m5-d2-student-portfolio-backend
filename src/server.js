@@ -8,7 +8,7 @@ const port = 3001;
 
 server.use(cors());
 server.use(express.json()); // così gli dico che i body sono json, altrimenti arrivanpo undefinded
-server.use('/students', studentsRouter);
+server.use('/students', studentsRouter); //usa questa parte comune di path per tutti gli endpoint
 
 console.log(listEndpoints(server));
 server.listen(port, () => {

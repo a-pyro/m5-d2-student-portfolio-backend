@@ -13,11 +13,10 @@ const __dirname = dirname(__files_path);
 // prendo il path del file json
 const studentsJSONpath = join(__dirname, 'students.json');
 
-const readStudents = () => {};
-
 router.post('/', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
   const newStudent = req.body;
+
   newStudent._id = uuidv4();
   students.push(newStudent);
   // console.log(req.body);
@@ -26,8 +25,24 @@ router.post('/', (req, res) => {
   res.status(201).send('created');
 });
 
+router.post('/checkEmail', (req, res) => {
+  const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
+  const email = req.body.email;
+  // console.log(email);
+  const findEmail = students.find((student) => student.email === email);
+  console.log(findEmail);
+  if (findEmail) {
+    res.status(200).send(true);
+  } else {
+    res.status(200).send(false);
+  }
+});
+
 router.get('/', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
+  console.log(fs.readFileSync(studentsJSONpath).toString());
+  // console.log(students);
+
   res.status(200).send(students);
 });
 
@@ -35,7 +50,6 @@ router.get('/:id', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
   const id = req.params.id;
   const student = students.find((stud) => stud._id === id);
-
   res.status(200).send(student);
 });
 
