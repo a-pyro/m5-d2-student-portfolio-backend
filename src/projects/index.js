@@ -29,7 +29,25 @@ const writeProjects = (projectsArr) =>
 router.get('/', (req, res, next) => {
   const projects = getProjects();
 
-  res.send(projects);
+  res.status(200).send(projects);
+});
+
+router.get('/:id', (req, res, next) => {
+  const projects = getProjects();
+  try {
+    const project = projects.find((proj) => proj.id === req.params.id);
+    console.log(project);
+    if (project) {
+      res.status(200).send(project);
+    } else {
+      const err = new Error();
+      err.httpStatusCode = 404;
+      next(err);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 });
 
 // router.post('/', (req, res, next) => {
