@@ -59,10 +59,12 @@ router.post('/', [], (req, res, next) => {
   const newProject = { ...req.body, id: uuidv4() };
   // console.log(students);
 
+  // check if is the first project added, if it's initialize count:1 else +=1
   const newStudentsArray = students.reduce((acc, cv) => {
     if (cv.id === req.body.studentID) {
-      if (cv.hasOwnProperty('numbersOfProjects')) cv.numbersOfProjects += 1;
-      else {
+      if (cv.hasOwnProperty('numbersOfProjects')) {
+        cv.numbersOfProjects += 1;
+      } else {
         cv.numbersOfProjects = 1;
       }
     }
