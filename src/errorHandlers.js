@@ -5,3 +5,11 @@ export const notFoundErrorHandler = (err, req, res, next) => {
     next(err);
   }
 };
+
+export const badRequestErrorHandling = (err, req, res, next) => {
+  if (err.httpStatusCode === 400) {
+    res.status(400).send(err.errorList);
+  } else {
+    next(err);
+  }
+};
