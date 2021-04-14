@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
   const newStudent = req.body;
 
-  newStudent._id = uuidv4();
+  newStudent.id = uuidv4();
   students.push(newStudent);
   // console.log(req.body);
   // console.log(students);
@@ -49,7 +49,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
   const id = req.params.id;
-  const student = students.find((stud) => stud._id === id);
+  const student = students.find((stud) => stud.id === id);
   res.status(200).send(student);
 });
 
@@ -57,7 +57,7 @@ router.delete('/:id', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
   const id = req.params.id;
 
-  const filteredStudents = students.filter((stud) => stud._id !== id);
+  const filteredStudents = students.filter((stud) => stud.id !== id);
   fs.writeFileSync(studentsJSONpath, JSON.stringify(filteredStudents));
 
   res.status(204).send();
@@ -67,9 +67,9 @@ router.put('/:id', (req, res) => {
   const students = JSON.parse(fs.readFileSync(studentsJSONpath).toString());
   const id = req.params.id;
   const editedStudent = req.body;
-  editedStudent._id = id;
+  editedStudent.id = id;
   students.splice(
-    students.findIndex((stud) => stud._id === id),
+    students.findIndex((stud) => stud.id === id),
     1,
     editedStudent
   );

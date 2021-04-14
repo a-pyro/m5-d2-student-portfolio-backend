@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { check, validationResult } from 'express-validator';
 
 const router = express.Router();
 
@@ -26,6 +27,9 @@ const getProjects = () =>
 const writeProjects = (projectsArr) =>
   fs.writeFileSync(projectsJSONpath, JSON.stringify(projectsArr));
 
+const writeStudents = (studentsArr) =>
+  fs.writeFileSync(studentsJSONpath, JSON.stringify(studentsArr));
+
 router.get('/', (req, res, next) => {
   const projects = getProjects();
 
@@ -36,7 +40,6 @@ router.get('/:id', (req, res, next) => {
   const projects = getProjects();
   try {
     const project = projects.find((proj) => proj.id === req.params.id);
-    console.log(project);
     if (project) {
       res.status(200).send(project);
     } else {
@@ -50,10 +53,28 @@ router.get('/:id', (req, res, next) => {
   }
 });
 
-// router.post('/', (req, res, next) => {
-//   const projects = getProjects();
-//   const newProject = {...req.body, id: uuidv4()}
+router.post('/', [], (req, res, next) => {
+  const projects = getProjects();
+  const students = getStudents();
+  const newProject = { ...req.body, id: uuidv4() };
+  console.log(students);
+  const newStudentsArray = students.reduce((acc, cv) => {
+    if (cv.id === req.body.studentID) {
+      if (cv.hasOwnProperty('numbersOfProjects')) cv.numbersOfProjects += 1;
+      else {
+        cv.numbersOfProjects = 0;
+      }
+    }
+    acc.push(cv);
+    return acc;
+  }, []);
+  console.log(newStudentsArray);
 
-// })
+  // if(){
+  // qui ci metto la logica per aggiornare il numero di progetti dello studente
+  // }
+
+  res.send('suca');
+});
 
 export default router;
