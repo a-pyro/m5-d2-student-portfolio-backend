@@ -57,24 +57,35 @@ router.post('/', [], (req, res, next) => {
   const projects = getProjects();
   const students = getStudents();
   const newProject = { ...req.body, id: uuidv4() };
-  console.log(students);
+  // console.log(students);
+
   const newStudentsArray = students.reduce((acc, cv) => {
     if (cv.id === req.body.studentID) {
       if (cv.hasOwnProperty('numbersOfProjects')) cv.numbersOfProjects += 1;
       else {
-        cv.numbersOfProjects = 0;
+        cv.numbersOfProjects = 1;
       }
     }
     acc.push(cv);
     return acc;
   }, []);
+
+  //aggiorno i projects
+
+  projects.push(newProject);
+
+  // scrivere su disco gli student
+  writeStudents(newStudentsArray);
+  //scrivere su disco il progetto
+  writeProjects(projects);
+
   console.log(newStudentsArray);
 
   // if(){
   // qui ci metto la logica per aggiornare il numero di progetti dello studente
   // }
 
-  res.send('suca');
+  res.status(201).send(newProject.id);
 });
 
 export default router;
