@@ -15,7 +15,7 @@ server.use('/projects', projectsRouter);
 
 /* Qui ci vanno gli error middlewares */
 
-console.log(listEndpoints(server));
+// console.log(listEndpoints(server));
 server.listen(port, () => {
   console.log(`server is running on port: ${port}`);
 });
