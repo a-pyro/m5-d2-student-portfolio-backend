@@ -4,9 +4,12 @@ import { check, validationResult } from 'express-validator';
 import {
   getProjects,
   getStudents,
+  getReviews,
   writeProjects,
   writeStudents,
+  writeReviews,
 } from '../lib/fs-tools.js';
+import e from 'express';
 
 const router = express.Router();
 
@@ -98,22 +101,25 @@ router.post(
 router.post(
   '/:id/reviews',
   [
-    check('name').exists().withMessage('name props must be present'),
-    check('projectID').exists().notEmpty().withMessage('projID Must BE there'),
-    check('text').exists().notEmpty().withMessage('a text should be provided'),
+    check('name').exists().withMessage('name props must be present').trim(),
+    check('projectID').notEmpty().withMessage('projID Must BE there').trim(),
+    check('text').notEmpty().withMessage('a text should be provided').trim(),
   ],
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
       if (errors.isEmpty()) {
-        console.log('match');
-        res.send({ params: req.params.id });
         const newReview = {
           ...req.body,
           id: uuidv4(),
           creationDate: new Date(),
+          name: req.body.name || 'Anonimous',
         };
         console.log(newReview);
+        const reviews = await getReviews();
+        reviews.push(newReview);
+        await writeReviews(reviews);
+        res.status(201).send({ params: newReview.id });
       } else {
         const err = new Error();
         err.errorList = errors;
@@ -126,5 +132,23 @@ router.post(
     }
   }
 );
+
+router.get('/:id/reviews', async (req, res, next) => {
+  try {
+    const reviews = await getReviews();
+    const reviewsToSend = reviews.filter(
+      (rev) => rev.projectID === req.params.id
+    );
+    if (reviewsToSend.length !== 0) {
+      res.status(200).send(reviewsToSend);
+      return;
+    }
+    const err = new Error('No reviews for this project');
+    err.httpStatusCode = 404;
+    next(err);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;
