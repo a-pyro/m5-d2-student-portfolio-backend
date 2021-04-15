@@ -10,12 +10,14 @@ import {
 
 const router = express.Router();
 
+// prendo tutti
 router.get('/', async (req, res, next) => {
   const projects = await getProjects();
 
   res.status(200).send(projects);
 });
 
+// prendo singolo
 router.get('/:id', async (req, res, next) => {
   const projects = await getProjects();
   try {
@@ -33,6 +35,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+// posto progetto
 router.post(
   '/',
   [
@@ -82,6 +85,43 @@ router.post(
       }
     } catch (error) {
       error.httpStatusCode = 500;
+      next(error);
+    }
+  }
+);
+
+// put project
+
+// delete project
+
+// post review
+router.post(
+  '/:id/reviews',
+  [
+    check('name').exists().withMessage('name props must be present'),
+    check('projectID').exists().notEmpty().withMessage('projID Must BE there'),
+    check('text').exists().notEmpty().withMessage('a text should be provided'),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        console.log('match');
+        res.send({ params: req.params.id });
+        const newReview = {
+          ...req.body,
+          id: uuidv4(),
+          creationDate: new Date(),
+        };
+        console.log(newReview);
+      } else {
+        const err = new Error();
+        err.errorList = errors;
+        err.httpStatusCode = 400;
+        next(err);
+      }
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }

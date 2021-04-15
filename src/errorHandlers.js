@@ -13,3 +13,11 @@ export const badRequestErrorHandling = (err, req, res, next) => {
     next(err);
   }
 };
+
+export const forbiddenErrorHandler = (err, req, res, next) => {
+  if (err.httpStatusCode === 403) res.status(403).send('Forbidden');
+  next(err);
+};
+
+export const catchAllErrorHandler = (err, req, res, next) =>
+  res.status(500).send('Generic Server Error');
