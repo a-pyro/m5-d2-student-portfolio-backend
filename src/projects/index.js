@@ -50,13 +50,8 @@ router.post(
       .isURL()
       .withMessage('must be a valid url')
       .trim(),
-    check('liveUrl').isURL().withMessage('must be a valid url').trim(),
-    check('studentID')
-      .exists()
-      .withMessage('mandatory')
-      .notEmpty()
-      .withMessage('provide student id')
-      .trim(),
+    check('liveUrl').trim(),
+    check('studentID').notEmpty().withMessage('provide student id').trim(),
   ],
   async (req, res, next) => {
     try {
@@ -103,6 +98,54 @@ router.post(
 );
 
 // put project
+router.put(
+  '/:id',
+  [
+    check('name').exists().withMessage('name field is mandatory').trim(),
+    check('description').exists().withMessage('field mandatory').trim(),
+    check('repoUrl')
+      .exists()
+      .withMessage('field mandatory')
+      .isURL()
+      .withMessage('must be a valid url')
+      .trim(),
+    check('liveUrl').trim(),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        const projects = await getProjects();
+        console.log(projects);
+        const creationDate = projects.find((proj) => proj.id === req.params.id)
+          .creationDate;
+        const editedProject = {
+          ...req.body,
+          id: req.params.id,
+          modifiedAt: new Date(),
+          creationDate,
+        };
+
+        const witoutEditedOne = projects.filter(
+          (proj) => proj.id !== req.params.id
+        );
+        witoutEditedOne.push(editedProject);
+
+        await writeProjects(witoutEditedOne);
+        res.status(200).send(editedProject);
+      } else {
+        const err = new Error();
+        err.httpStatusCode === 400;
+        err.errorList = errors;
+        next(err);
+      }
+    } catch (error) {
+      // error.httpStatusCode = 500;
+      console.log(error);
+      // next(error);
+    }
+  }
+);
 
 // delete project
 
@@ -142,6 +185,7 @@ router.post(
   }
 );
 
+// get review
 router.get('/:id/reviews', async (req, res, next) => {
   try {
     const reviews = await getReviews();
@@ -161,5 +205,9 @@ router.get('/:id/reviews', async (req, res, next) => {
     next(error);
   }
 });
+
+// put rev
+
+// delete review
 
 export default router;

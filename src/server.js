@@ -1,9 +1,7 @@
 import express from 'express';
 import studentsRouter from './students/index.js';
 import projectsRouter from './projects/index.js';
-
 import listEndpoints from 'express-list-endpoints';
-
 import cors from 'cors';
 import {
   notFoundErrorHandler,
