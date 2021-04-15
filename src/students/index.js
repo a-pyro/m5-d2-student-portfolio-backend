@@ -1,7 +1,12 @@
 import express from 'express';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { getProjects, getStudents, writeStudents } from '../lib/fs-tools.js';
+import {
+  getProjects,
+  getStudents,
+  writeProfilePicture,
+  writeStudents,
+} from '../lib/fs-tools.js';
 
 const router = express.Router();
 
@@ -106,16 +111,48 @@ router.get('/:studentId/projects', async (req, res, next) => {
 
 router.post(
   '/:id/uploadPhoto',
-  multer().single('profilePicture'),
+  multer().single('profilePic'),
   async (req, res, next) => {
     try {
-      console.log(req.file);
-      res.send('upload');
+      const paramsID = req.params.id;
+      // console.log(paramsID);
+      // console.log(req.file);
+
+      const imgURL = `${req.protocol}://${req.get(
+        'host'
+      )}/public/img/students/${paramsID}.jpg`;
+      console.log(imgURL);
+      const students = await getStudents();
+      // prima di mettere l'url nello studente fixare la pubblic folder per servire file statici
+      // const updatedStudents = students.reduce((acc, cv) => {
+      //   if(cv.id === paramsID) {
+      //     cv.image =
+      //   }
+
+      //   return acc
+      // }, [])
+      await writeProfilePicture(`${paramsID}.jpg`, req.file.buffer);
+      res.status(200).send('ok');
     } catch (error) {
       console.log(error);
       next(error);
     }
   }
 );
+
+// router.post(
+//   '/:id/uploadPhoto',
+//   multer().single('profilePic'),
+//   async (req, res, next) => {
+//     try {
+//       console.log(req.file);
+//       // console.log(req.file);
+//       res.send('upload');
+//     } catch (error) {
+//       console.log(error);
+//       next(error);
+//     }
+//   }
+// );
 
 export default router;
