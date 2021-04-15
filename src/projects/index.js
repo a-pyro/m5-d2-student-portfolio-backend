@@ -147,6 +147,8 @@ router.get('/:id/reviews', async (req, res, next) => {
     err.httpStatusCode = 404;
     next(err);
   } catch (error) {
+    error.httpStatusCode === 500;
+    console.log('error', error);
     next(error);
   }
 });
