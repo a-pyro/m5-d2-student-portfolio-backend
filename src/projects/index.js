@@ -148,6 +148,16 @@ router.put(
 );
 
 // delete project
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const projects = await getProjects();
+    const newProjects = projects.filter((proj) => proj.id !== req.params.id);
+    await writeProjects(newProjects);
+    res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // post review
 router.post(
