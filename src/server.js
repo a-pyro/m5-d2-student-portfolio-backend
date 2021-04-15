@@ -24,7 +24,7 @@ server.use(notFoundErrorHandler);
 server.use(badRequestErrorHandling);
 server.use(forbiddenErrorHandler);
 server.use(catchAllErrorHandler);
-console.log(listEndpoints(server));
+// console.log(listEndpoints(server));
 server.listen(port, () => {
   console.log(`server is running on port: ${port}`);
 });

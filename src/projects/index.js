@@ -12,12 +12,33 @@ import {
 import e from 'express';
 
 const router = express.Router();
+///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ========== projects ================
+///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // prendo tutti
 router.get('/', async (req, res, next) => {
-  const projects = await getProjects();
+  try {
+    const projects = await getProjects();
+    const query = req.query.name;
+    if (query) {
+      const queriedProjects = projects.find((proj) => proj.name === query);
+      if (queriedProjects) {
+        res.status(200).send(queriedProjects);
+      } else {
+        const err = new Error('Not Found');
+        err.httpStatusCode = 404;
+        next(err);
+      }
+    } else {
+      res.status(200).send(projects);
+    }
 
-  res.status(200).send(projects);
+    // console.log(query);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 });
 
 // prendo singolo
@@ -116,23 +137,27 @@ router.put(
       const errors = validationResult(req);
       if (errors.isEmpty()) {
         const projects = await getProjects();
-        console.log(projects);
-        const creationDate = projects.find((proj) => proj.id === req.params.id)
-          .creationDate;
-        const editedProject = {
-          ...req.body,
-          id: req.params.id,
-          modifiedAt: new Date(),
-          creationDate,
-        };
+        // console.log(projects);
+        const oldProj = projects.find((proj) => proj.id === req.params.id);
+        if (oldProj) {
+          const editedProject = {
+            ...req.body,
+            id: req.params.id,
+            modifiedAt: new Date(),
+            creationDate: oldProj.creationDate,
+            studentID: oldProj.studentID,
+          };
 
-        const witoutEditedOne = projects.filter(
-          (proj) => proj.id !== req.params.id
-        );
-        witoutEditedOne.push(editedProject);
+          const witoutEditedOne = projects.filter(
+            (proj) => proj.id !== req.params.id
+          );
+          witoutEditedOne.push(editedProject);
 
-        await writeProjects(witoutEditedOne);
-        res.status(200).send(editedProject);
+          await writeProjects(witoutEditedOne);
+          res.status(200).send(editedProject);
+          return;
+        }
+        res.status(404).send('NOT FOUND');
       } else {
         const err = new Error();
         err.httpStatusCode === 400;
@@ -152,12 +177,24 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const projects = await getProjects();
     const newProjects = projects.filter((proj) => proj.id !== req.params.id);
+    if (projects.length === newProjects.length) {
+      res.status(404).send('NOT FOUND');
+      return;
+    }
     await writeProjects(newProjects);
-    res.sendStatus(204);
+    res.status(204).send();
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
+
+// get all projects from a student
+router.get('/');
+
+///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ========== reviewss ================
+///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // post review
 router.post(

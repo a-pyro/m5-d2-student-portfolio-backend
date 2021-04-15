@@ -1,47 +1,5 @@
 [
   {
-    "name": "random proj",
-    "description": "sahifaishfgasiofhaso",
-    "repoUrl": "fjsjfiasjfsifja.it",
-    "liveUrl": "safjsalfjasilfja.it",
-    "studentID": "1095c9c3-6f77-42b0-95ad-9a5e07a6c028",
-    "id": "93f2a842-70d4-461d-a639-6af21efb2a1a"
-  },
-  {
-    "name": "another random proj",
-    "description": "sahifaishfgasiofhaso",
-    "repoUrl": "fjsjfiasjfsifja.com",
-    "liveUrl": "safjsalfjasilfja.com",
-    "studentID": "1095c9c3-6f77-42b0-95ad-9a5e07a6c028",
-    "id": "c10c7bbb-4dd0-482d-a3a0-8ae6c99074f9"
-  },
-  {
-    "name": "third random proj",
-    "description": "helloooooo",
-    "repoUrl": "boringstuff.com",
-    "liveUrl": "notsomuch.com",
-    "studentID": "d9a87418-7cf4-4e47-8822-dabd890e93af",
-    "id": "21ee5fb1-4843-405d-8ab4-cbde29bde4e2"
-  },
-  {
-    "name": "third random proj",
-    "creationDate": "2021-04-14T17:39:37.424Z",
-    "description": "helloooooo",
-    "repoUrl": "boringstuff.com",
-    "liveUrl": "notsomuch.com",
-    "studentID": "d9a87418-7cf4-4e47-8822-dabd890e93af",
-    "id": "2e64105f-ce7f-495f-a611-cda5f810c481"
-  },
-  {
-    "name": "another one",
-    "description": "helloooooo",
-    "repoUrl": "boringstuff.com",
-    "studentID": "d9a87418-7cf4-4e47-8822-dabd890e93af",
-    "liveUrl": "",
-    "id": "3c6aea19-93d4-4ea7-a198-6d4e1780028d",
-    "creationDate": "2021-04-15T16:23:11.056Z"
-  },
-  {
     "name": "this is for testing the put modified1",
     "description": "puttin",
     "repoUrl": "boringstuff.com",
@@ -52,12 +10,58 @@
     "creationDate": "2021-04-15T16:52:34.948Z"
   },
   {
-    "name": "just ediddddted",
-    "description": "hellddoooooo",
-    "repoUrl": "boringstdduff.com",
+    "name": "edited, again",
+    "description": "puttin",
+    "repoUrl": "boringstuff.com",
     "liveUrl": "notsomuch.com",
-    "id": "b11ba741-4e79-4326-82f6-367607f64479",
-    "modifiedAt": "2021-04-15T17:56:10.499Z",
-    "creationDate": "2021-04-15T16:19:47.553Z"
+    "id": "f2178e0a-4cfb-4991-9e17-d6f8dfc638fa",
+    "modifiedAt": "2021-04-15T18:53:03.047Z",
+    "creationDate": "2021-04-15T18:48:23.315Z",
+    "studentID": "d9a87418-7cf4-4e47-8822-dabd890e93af"
+  },
+  {
+    "name": "adding project for il magnifico",
+    "description": "puttin",
+    "repoUrl": "boringstuff.com",
+    "liveUrl": "notsomuch.com",
+    "studentID": "fe31d70f-e7ef-40a2-be88-116c4434c029",
+    "id": "77f8aff1-4fdb-44c3-a881-c830089d4d7e",
+    "creationDate": "2021-04-15T18:56:22.369Z"
+  },
+  {
+    "name": "adding another project for il magnifico",
+    "description": "posting",
+    "repoUrl": "boringstuff.com",
+    "liveUrl": "notsomuch.com",
+    "studentID": "fe31d70f-e7ef-40a2-be88-116c4434c029",
+    "id": "2fb21bc3-2da9-49ec-8235-9fe0055c4108",
+    "creationDate": "2021-04-15T18:56:41.592Z"
+  },
+  {
+    "name": "adding project for il bellissimo",
+    "description": "posting",
+    "repoUrl": "boringstuff.com",
+    "liveUrl": "notsomuch.com",
+    "studentID": "2dba07e2-2466-4cae-bc09-8e87728f94b6",
+    "id": "ab3ba874-023f-452d-aea2-08ad0bf59692",
+    "creationDate": "2021-04-15T18:57:29.248Z"
+  },
+  {
+    "name": "adding second project for il bellissimo",
+    "description": "posting",
+    "repoUrl": "boringstuff.com",
+    "liveUrl": "notsomuch.com",
+    "studentID": "2dba07e2-2466-4cae-bc09-8e87728f94b6",
+    "id": "84249581-f2fe-4cf1-af57-818c36079852",
+    "creationDate": "2021-04-15T18:57:40.287Z"
+  },
+  {
+    "name": "adding terzo project for il bellissimo",
+    "description": "posting",
+    "repoUrl": "boringstuff.com",
+    "liveUrl": "notsomuch.com",
+    "studentID": "2dba07e2-2466-4cae-bc09-8e87728f94b6",
+    "id": "72f9cee5-bf6e-40b5-a89e-7cbe0ea4c96a",
+    "creationDate": "2021-04-15T18:57:44.905Z"
   }
 ]

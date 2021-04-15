@@ -1,6 +1,7 @@
 import express from 'express';
+import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { getStudents, writeStudents } from '../lib/fs-tools.js';
+import { getProjects, getStudents, writeStudents } from '../lib/fs-tools.js';
 
 const router = express.Router();
 
@@ -55,18 +56,66 @@ router.delete('/:id', async (req, res) => {
   res.status(204).send();
 });
 
-router.put('/:id', async (req, res) => {
-  const students = await getStudents();
-  const id = req.params.id;
-  const editedStudent = req.body;
-  editedStudent.id = id;
-  students.splice(
-    students.findIndex((stud) => stud.id === id),
-    1,
-    editedStudent
-  );
-  await writeStudents(students);
-  res.status(200).send(editedStudent);
+router.put('/:id', async (req, res, next) => {
+  try {
+    const students = await getStudents();
+    const paramsId = req.params.id;
+    const editedStudent = { ...req.body };
+
+    const newStudents = students.reduce((acc, student) => {
+      if (student.id === paramsId) {
+        const mergedStudend = { ...student, ...editedStudent };
+        acc.push(mergedStudend);
+        return acc;
+      }
+      acc.push(student);
+      return acc;
+    }, []);
+
+    await writeStudents(newStudents);
+    res.status(200).send(editedStudent);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 });
+
+// get all the project for a student
+router.get('/:studentId/projects', async (req, res, next) => {
+  try {
+    const reqParam = req.params.studentId;
+    // console.log(reqParam);
+    const projects = await getProjects();
+    const projectsOfTheUser = projects.filter(
+      (proj) => proj.studentID === reqParam
+    );
+    if (projectsOfTheUser.length === 0) {
+      res.status(400).send('student has 0 projects');
+      return;
+    }
+    res.status(200).send(projectsOfTheUser);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ========== Image upload ================
+///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+router.post(
+  '/:id/uploadPhoto',
+  multer().single('profilePicture'),
+  async (req, res, next) => {
+    try {
+      console.log(req.file);
+      res.send('upload');
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+);
 
 export default router;
