@@ -42,12 +42,21 @@ router.get('/:id', async (req, res, next) => {
 router.post(
   '/',
   [
-    check('name')
+    check('name').exists().withMessage('name field is mandatory').trim(),
+    check('description').exists().withMessage('field mandatory').trim(),
+    check('repoUrl')
       .exists()
-      .withMessage('name is mandatory')
-      .not()
-      .isEmpty()
-      .withMessage('cant accept empty strings'),
+      .withMessage('field mandatory')
+      .isURL()
+      .withMessage('must be a valid url')
+      .trim(),
+    check('liveUrl').isURL().withMessage('must be a valid url').trim(),
+    check('studentID')
+      .exists()
+      .withMessage('mandatory')
+      .notEmpty()
+      .withMessage('provide student id')
+      .trim(),
   ],
   async (req, res, next) => {
     try {
@@ -153,4 +162,4 @@ router.get('/:id/reviews', async (req, res, next) => {
   }
 });
 
-// export default router;
+export default router;
