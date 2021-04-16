@@ -19,11 +19,8 @@ const port = process.env.PORT || 3002;
 /* static file serving */
 const currentDirectory = getCurrentDirectory(import.meta.url);
 // console.log(currentDirectory);
-const publicImgStudentsDirectory = join(
-  currentDirectory,
-  '../public/img/students'
-); //prendo la direcorty delle foto nella pubblic
-server.use(express.static(publicImgStudentsDirectory)); //gli dico di usarla come static
+const publicDirectory = join(currentDirectory, '../public'); //prendo la direcorty delle foto nella pubblic
+server.use(express.static(publicDirectory)); //gli dico di usarla come static
 
 server.use(cors());
 server.use(express.json()); // così gli dico che i body sono json, altrimenti arrivanpo undefinded

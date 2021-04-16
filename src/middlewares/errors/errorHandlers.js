@@ -29,9 +29,12 @@ export const forbiddenErrorHandler = (err, req, res, next) => {
 
 // se mi chiamano route sbagliata
 export const routeNotFoundHandler = (req, res, next) => {
-  console.log(req.pathname);
-  res.status.send('not found');
+  // console.log(req.originalUrl);
+  res.status(404).send({
+    message: `${req.protocol}://${req.hostname}:${process.env.PORT}${req.originalUrl} is not implemented or wrong`,
+  });
 };
+
 export const catchAllErrorHandler = (err, req, res, next) => {
   console.log('catchAllErrorHandler');
   res.status(500).send('Generic Server Error');

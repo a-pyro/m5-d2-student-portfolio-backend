@@ -7,6 +7,7 @@ import {
   writeProfilePicture,
   writeStudents,
 } from '../lib/fs-tools.js';
+import { checkFile } from '../middlewares/index.js';
 
 const router = Router();
 
@@ -116,13 +117,16 @@ router.get('/:studentId/projects', async (req, res, next) => {
 router.post(
   '/:id/uploadPhoto',
   multer().single('profilePic'),
+  checkFile(['image/jpeg', 'image/png']),
   async (req, res, next) => {
     try {
       const paramsID = req.params.id;
       // console.log(paramsID);
       // console.log(req.file);
 
-      const imgURL = `${req.protocol}://${req.get('host')}/${paramsID}.jpg`;
+      const imgURL = `${req.protocol}://${req.get(
+        'host'
+      )}/img/students/${paramsID}.jpg`;
       console.log(imgURL);
       const students = await getStudents();
 
@@ -142,7 +146,7 @@ router.post(
 
       //scrivo file su disco
       await writeProfilePicture(`${paramsID}.jpg`, req.file.buffer);
-      res.status(200).send('ok');
+      res.status(200).send({ imgURL });
     } catch (err) {
       const error = new Error(err.message);
       error.httpStatusCode = 500;
