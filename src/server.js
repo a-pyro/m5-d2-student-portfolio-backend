@@ -8,10 +8,22 @@ import {
   badRequestErrorHandling,
   catchAllErrorHandler,
   forbiddenErrorHandler,
-} from './errorHandlers.js';
+  routeNotFoundHandler,
+} from './middlewares/errors/errorHandlers.js';
+import { getCurrentDirectory } from './lib/fs-tools.js';
+import { join } from 'path';
 
 const server = express();
 const port = process.env.PORT || 3002;
+
+/* static file serving */
+const currentDirectory = getCurrentDirectory(import.meta.url);
+// console.log(currentDirectory);
+const publicImgStudentsDirectory = join(
+  currentDirectory,
+  '../public/img/students'
+); //prendo la direcorty delle foto nella pubblic
+server.use(express.static(publicImgStudentsDirectory)); //gli dico di usarla come static
 
 server.use(cors());
 server.use(express.json()); // così gli dico che i body sono json, altrimenti arrivanpo undefinded
@@ -24,7 +36,12 @@ server.use(notFoundErrorHandler);
 server.use(badRequestErrorHandling);
 server.use(forbiddenErrorHandler);
 server.use(catchAllErrorHandler);
+server.use(routeNotFoundHandler);
 // console.log(listEndpoints(server));
+
 server.listen(port, () => {
-  console.log(`server is running on port: ${port}`);
+  console.log(`🤸🏻‍♂️ server is running on port: ${port}`);
+});
+server.on('error', (error) => {
+  console.log(`🚫 server not running due to: ${error}`);
 });

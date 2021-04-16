@@ -5,7 +5,8 @@
     "email": "ardi.germenji@gmail.com",
     "dateOfBirth": "2021-04-07",
     "id": "2dba07e2-2466-4cae-bc09-8e87728f94b6",
-    "numbersOfProjects": 3
+    "numbersOfProjects": 3,
+    "image": "http://localhost:3001/2dba07e2-2466-4cae-bc09-8e87728f94b6.jpg"
   },
   {
     "name": "Ardi il Magnifico Magnifico",
@@ -13,7 +14,8 @@
     "email": "ardi.germenji@gmail.co",
     "dateOfBirth": "2021-04-11",
     "id": "fe31d70f-e7ef-40a2-be88-116c4434c029",
-    "numbersOfProjects": 2
+    "numbersOfProjects": 2,
+    "image": "http://localhost:3001/fe31d70f-e7ef-40a2-be88-116c4434c029.jpg"
   },
   {
     "name": "trevor Germenji",
@@ -21,13 +23,16 @@
     "email": "ardi.germenji@gmail.com",
     "dateOfBirth": "",
     "id": "d9a87418-7cf4-4e47-8822-dabd890e93af",
-    "numbersOfProjects": 2
+    "numbersOfProjects": 2,
+    "image": "http://localhost:3001/d9a87418-7cf4-4e47-8822-dabd890e93af.jpg",
+    "updatedAt": "2021-04-16T13:16:43.710Z"
   },
   {
     "name": "morty",
     "surname": "smith",
     "email": "rick@morty.com",
     "dateOfBirth": "20/01/90",
-    "id": "429a30a8-8fbf-462e-b84e-6a78fb15c15d"
+    "id": "429a30a8-8fbf-462e-b84e-6a78fb15c15d",
+    "image": "http://localhost:3001/429a30a8-8fbf-462e-b84e-6a78fb15c15d.jpg"
   }
 ]

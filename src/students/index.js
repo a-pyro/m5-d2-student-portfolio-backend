@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -8,13 +8,13 @@ import {
   writeStudents,
 } from '../lib/fs-tools.js';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/', async (req, res) => {
   const students = await getStudents();
-  const newStudent = req.body;
+  const newStudent = { ...req.body, id: uuidv4(), createdAt: new Date() };
   // console.log(students);
-  newStudent.id = uuidv4();
+
   students.push(newStudent);
   // console.log(req.body);
   // console.log(students);
@@ -69,7 +69,11 @@ router.put('/:id', async (req, res, next) => {
 
     const newStudents = students.reduce((acc, student) => {
       if (student.id === paramsId) {
-        const mergedStudend = { ...student, ...editedStudent };
+        const mergedStudend = {
+          ...student,
+          ...editedStudent,
+          updatedAt: new Date(),
+        };
         acc.push(mergedStudend);
         return acc;
       }
@@ -118,23 +122,30 @@ router.post(
       // console.log(paramsID);
       // console.log(req.file);
 
-      const imgURL = `${req.protocol}://${req.get(
-        'host'
-      )}/public/img/students/${paramsID}.jpg`;
+      const imgURL = `${req.protocol}://${req.get('host')}/${paramsID}.jpg`;
       console.log(imgURL);
       const students = await getStudents();
-      // prima di mettere l'url nello studente fixare la pubblic folder per servire file statici
-      // const updatedStudents = students.reduce((acc, cv) => {
-      //   if(cv.id === paramsID) {
-      //     cv.image =
-      //   }
 
-      //   return acc
-      // }, [])
+      // prima di mettere l'url nello studente fixare la pubblic folder per servire file statici
+      const updatedStudents = students.reduce((acc, cv) => {
+        if (cv.id === paramsID) {
+          cv.image = imgURL;
+          cv.updatedAt = new Date();
+          acc.push(cv);
+          return acc;
+        }
+        acc.push(cv);
+        return acc;
+      }, []);
+      //scrivo studenti
+      await writeStudents(updatedStudents);
+
+      //scrivo file su disco
       await writeProfilePicture(`${paramsID}.jpg`, req.file.buffer);
       res.status(200).send('ok');
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      const error = new Error(err.message);
+      error.httpStatusCode = 500;
       next(error);
     }
   }

@@ -27,6 +27,11 @@ export const forbiddenErrorHandler = (err, req, res, next) => {
   next(err);
 };
 
+// se mi chiamano route sbagliata
+export const routeNotFoundHandler = (req, res, next) => {
+  console.log(req.pathname);
+  res.status.send('not found');
+};
 export const catchAllErrorHandler = (err, req, res, next) => {
   console.log('catchAllErrorHandler');
   res.status(500).send('Generic Server Error');

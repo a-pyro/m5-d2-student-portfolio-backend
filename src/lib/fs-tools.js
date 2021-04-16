@@ -36,3 +36,9 @@ export const writeReviews = async (reviewsArr) =>
 export const writeProfilePicture = async (fileName, content) => {
   await writeFile(join(studentIMGfolderPath, fileName), content);
 };
+
+export const getCurrentDirectory = (importMetaUrl) => {
+  const currentWorkingFile = fileURLToPath(importMetaUrl);
+  const currentWorkingDirectory = dirname(currentWorkingFile);
+  return currentWorkingDirectory;
+};
