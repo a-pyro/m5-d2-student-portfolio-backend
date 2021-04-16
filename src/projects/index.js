@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { check, validationResult } from 'express-validator';
 import {
@@ -8,10 +8,14 @@ import {
   writeProjects,
   writeStudents,
   writeReviews,
+  writeProjectPicture,
 } from '../lib/fs-tools.js';
-import e from 'express';
+import multer from 'multer';
+import { checkFile } from '../middlewares/index.js';
 
-const router = express.Router();
+const upload = multer();
+
+const router = Router();
 ///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ========== projects ================
 ///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -143,7 +147,7 @@ router.put(
           const editedProject = {
             ...req.body,
             id: req.params.id,
-            modifiedAt: new Date(),
+            updatedAt: new Date(),
             creationDate: oldProj.creationDate,
             studentID: oldProj.studentID,
           };
@@ -189,8 +193,56 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-// get all projects from a student
+// !todo get all projects from a student
 router.get('/');
+
+router.post(
+  '/:id/uploadPhoto',
+  upload.single('projectPic'),
+  checkFile(['image/jpeg', 'image/jpg', 'image/png']),
+  async (req, res, next) => {
+    try {
+      //costruisco img url
+      const { buffer, mimetype } = req.file;
+      const paramsProjectID = req.params.id;
+      const imgURL = `${req.protocol}://${req.hostname}:${
+        process.env.PORT
+      }/img/projects/${paramsProjectID}.${mimetype.split('/')[1]}`;
+      // console.log(imgURL);
+
+      //aggiorno il projetto
+      const projects = await getProjects();
+      console.log(projects);
+
+      const newProjects = projects.reduce((acc, cv) => {
+        if (cv.id === paramsProjectID) {
+          cv = {
+            ...cv,
+            image: imgURL,
+            updatedAt: new Date(),
+          };
+
+          acc.push(cv);
+          return acc;
+        }
+        acc.push(cv);
+        return acc;
+      }, []);
+      console.log(newProjects);
+      // scrivo projects su disco
+      writeProjects(newProjects);
+      writeProjectPicture(
+        `${paramsProjectID}.${mimetype.split('/')[1]}`,
+        buffer
+      );
+      res.status(200).send({ imgURL });
+    } catch (err) {
+      const error = new Error();
+      error.httpStatusCode = 500;
+      next(error);
+    }
+  }
+);
 
 ///::::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ========== reviewss ================

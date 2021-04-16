@@ -11,6 +11,10 @@ const studentIMGfolderPath = join(
   __currentDirname,
   '../../public/img/students'
 );
+const projectsIMGfolderPath = join(
+  __currentDirname,
+  '../../public/img/projects'
+);
 
 /* prendo il path degli students */
 // console.log(__dataFolderPath);
@@ -35,6 +39,10 @@ export const writeReviews = async (reviewsArr) =>
 
 export const writeProfilePicture = async (fileName, content) => {
   await writeFile(join(studentIMGfolderPath, fileName), content);
+};
+
+export const writeProjectPicture = async (fileName, content) => {
+  await writeFile(join(projectsIMGfolderPath, fileName), content);
 };
 
 export const getCurrentDirectory = (importMetaUrl) => {

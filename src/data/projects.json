@@ -6,8 +6,9 @@
     "liveUrl": "notsomuch.com",
     "studentID": "d9a87418-7cf4-4e47-8822-dabd890e93af",
     "id": "5d000136-3aad-4bf4-ab0b-9c13159f9f2a",
-    "modifiedAt": "2021-04-15T17:33:48.042Z",
-    "creationDate": "2021-04-15T16:52:34.948Z"
+    "updatedAt": "2021-04-16T15:12:22.889Z",
+    "creationDate": "2021-04-15T16:52:34.948Z",
+    "image": "http://localhost:3001/img/projects/5d000136-3aad-4bf4-ab0b-9c13159f9f2a.jpeg"
   },
   {
     "name": "edited, again",
@@ -15,7 +16,7 @@
     "repoUrl": "boringstuff.com",
     "liveUrl": "notsomuch.com",
     "id": "f2178e0a-4cfb-4991-9e17-d6f8dfc638fa",
-    "modifiedAt": "2021-04-15T18:53:03.047Z",
+    "updatedAt": "2021-04-15T18:53:03.047Z",
     "creationDate": "2021-04-15T18:48:23.315Z",
     "studentID": "d9a87418-7cf4-4e47-8822-dabd890e93af"
   },
