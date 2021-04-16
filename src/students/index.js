@@ -140,19 +140,4 @@ router.post(
   }
 );
 
-// router.post(
-//   '/:id/uploadPhoto',
-//   multer().single('profilePic'),
-//   async (req, res, next) => {
-//     try {
-//       console.log(req.file);
-//       // console.log(req.file);
-//       res.send('upload');
-//     } catch (error) {
-//       console.log(error);
-//       next(error);
-//     }
-//   }
-// );
-
 export default router;
