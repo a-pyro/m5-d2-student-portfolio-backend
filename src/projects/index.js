@@ -206,6 +206,7 @@ router.post(
       //costruisco img url
       const { buffer, mimetype } = req.file;
       const paramsProjectID = req.params.id;
+      console.log(req.url);
       const imgURL = `${req.protocol}://${req.hostname}:${
         process.env.PORT
       }/img/projects/${paramsProjectID}.${mimetype.split('/')[1]}`;

@@ -11,6 +11,8 @@ const studentIMGfolderPath = join(
   __currentDirname,
   '../../public/img/students'
 );
+console.log(import.meta.url);
+console.log(fileURLToPath(import.meta.url));
 const projectsIMGfolderPath = join(
   __currentDirname,
   '../../public/img/projects'
