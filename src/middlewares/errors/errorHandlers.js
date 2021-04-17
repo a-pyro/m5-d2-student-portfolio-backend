@@ -37,5 +37,7 @@ export const routeNotFoundHandler = (req, res, next) => {
 
 export const catchAllErrorHandler = (err, req, res, next) => {
   console.log('catchAllErrorHandler');
-  res.status(500).send('Generic Server Error');
+  // console.log(err.stack);
+  // res.status(500).send('Generic Server Error');
+  res.status(500).send('cazzo abbiamo un problema');
 };

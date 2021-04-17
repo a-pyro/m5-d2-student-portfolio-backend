@@ -32,7 +32,9 @@ server.use('/projects', projectsRouter);
 server.use(notFoundErrorHandler);
 server.use(badRequestErrorHandling);
 server.use(forbiddenErrorHandler);
+
 server.use(catchAllErrorHandler);
+
 server.use(routeNotFoundHandler);
 // console.log(listEndpoints(server));
 

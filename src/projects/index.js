@@ -201,6 +201,7 @@ router.post(
   upload.single('projectPic'),
   checkFile(['image/jpeg', 'image/jpg', 'image/png']),
   async (req, res, next) => {
+    console.log(req.file);
     try {
       //costruisco img url
       const { buffer, mimetype } = req.file;
@@ -212,7 +213,7 @@ router.post(
 
       //aggiorno il projetto
       const projects = await getProjects();
-      console.log(projects);
+      // console.log(projects);
 
       const newProjects = projects.reduce((acc, cv) => {
         if (cv.id === paramsProjectID) {
@@ -228,7 +229,7 @@ router.post(
         acc.push(cv);
         return acc;
       }, []);
-      console.log(newProjects);
+      // console.log(newProjects);
       // scrivo projects su disco
       writeProjects(newProjects);
       writeProjectPicture(

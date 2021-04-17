@@ -1,4 +1,12 @@
-// export const checkFile = (types, formDataKey) => (req, res, next) => {
+// export const checkFile = (types, formDataKey) => (err, req, res, next) => {
+//   console.log('here');
+//   if (err.field) {
+//     console.log(err.field);
+//     res.send(err.field);
+//     return;
+//   }
+
+//   console.log('there');
 //   const { fieldname, mimetype } = req.file;
 //   console.log(fieldname, mimetype);
 
@@ -21,6 +29,10 @@
 // };
 
 export const checkFile = (types) => (req, res, next) => {
+  // console.log('hi');
+  // if (err) console.log(err.field);
+  // res.send(err.field);
+  // return;
   const { mimetype } = req.file;
   // console.log(mimetype);
   if (!types.includes(mimetype)) {
