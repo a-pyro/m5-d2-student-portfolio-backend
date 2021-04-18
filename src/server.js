@@ -34,11 +34,11 @@ app.use('/students', studentsRouter); //usa questa parte comune di path per tutt
 app.use('/projects', projectsRouter);
 
 /* Qui ci vanno gli error middlewares */
+app.use(routeNotFoundHandler);
 app.use(notFoundErrorHandler);
 app.use(badRequestErrorHandling);
 app.use(forbiddenErrorHandler);
 app.use(catchAllErrorHandler);
-app.use(routeNotFoundHandler);
 // console.log(listEndpoints(app));
 
 const port = process.env.PORT || 3002;

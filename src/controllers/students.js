@@ -6,6 +6,7 @@ import {
   writeStudents,
 } from '../utils/fsTools.js';
 import asyncHandler from '../middlewares/async.js';
+import ErrorRespone from '../utils/errorResponse.js';
 //@desc     Get All Students
 //@route    GET /students
 //@access   Public
@@ -85,17 +86,21 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
 //@access   Public
 export const getStudentProjectsController = asyncHandler(
   async (req, res, next) => {
+    const students = await getStudents();
     const reqParam = req.params.id;
+    if (!students.find((stud) => stud.id === reqParam)) {
+      console.log('hiiii');
+      return next(new ErrorRespone(`Student not in DB`, 404));
+    }
     // console.log(reqParam);
     const projects = await getProjects();
     const projectsOfTheUser = projects.filter(
       (proj) => proj.studentID === reqParam
     );
     if (projectsOfTheUser.length === 0) {
-      res.status(400).send('student has 0 projects');
-      return;
+      return res.status(400).send('student has 0 projects');
     }
-    res.status(200).send(projectsOfTheUser);
+    res.status(200).send({ success: true, data: projectsOfTheUser });
   }
 );
 

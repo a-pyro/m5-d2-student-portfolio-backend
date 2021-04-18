@@ -39,7 +39,6 @@ export const routeNotFoundHandler = (req, res, next) => {
 
 export const catchAllErrorHandler = (err, req, res, next) => {
   console.log('catchAllErrorHandler'.red);
-  console.log(err.stack);
 
   if (err.origin === 'multerExt') {
     return res
@@ -47,13 +46,20 @@ export const catchAllErrorHandler = (err, req, res, next) => {
       .send({ success: false, message: err.message });
   }
 
-  if (err.field !== 'profilePic') {
+  if (err.field && err.field !== 'profilePic') {
     return res.status(400).send({
       success: false,
       message: `profilePic expected as fieldname, you sent ${err.field}`,
     });
   }
-  // console.log(err.stack);
-  // res.status(500).send('Generic Server Error');
-  res.status(500).send({ message: 'internal server error 💩' });
+  if (!err.statusCode) {
+    return res.status(500).send({
+      success: false,
+      message: 'internal server error 💩',
+    });
+  }
+  res.status(err.statusCode).send({
+    success: false,
+    message: err.message || 'internal server error 💩',
+  });
 };

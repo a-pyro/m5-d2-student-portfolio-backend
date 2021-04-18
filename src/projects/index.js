@@ -12,6 +12,8 @@ import {
 } from '../utils/fsTools.js';
 import multer from 'multer';
 import { checkFile } from '../middlewares/checkFileMime.js';
+import ErrorRespone from '../utils/errorResponse.js';
+import asyncHandler from '../middlewares/async.js';
 
 const upload = multer();
 
@@ -78,48 +80,43 @@ router.post(
     check('liveUrl').trim(),
     check('studentID').notEmpty().withMessage('provide student id').trim(),
   ],
-  async (req, res, next) => {
-    try {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        const projects = await getProjects();
-        const students = await getStudents();
-        const newProject = {
-          ...req.body,
-          id: uuidv4(),
-          creationDate: new Date(),
-        };
-        // console.log(students);
-        // check if is the first project added, if it's initialize count:1 else +=1
-        const newStudentsArray = students.reduce((acc, cv) => {
-          if (cv.id === req.body.studentID) {
-            if (cv.hasOwnProperty('numbersOfProjects')) {
-              cv.numbersOfProjects += 1;
-            } else {
-              cv.numbersOfProjects = 1;
-            }
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const projects = await getProjects();
+      const students = await getStudents();
+      const newProject = {
+        ...req.body,
+        id: uuidv4(),
+        creationDate: new Date(),
+      };
+      // console.log(students);
+      // check if is the first project added, if it's initialize count:1 else +=1
+      const newStudentsArray = students.reduce((acc, cv) => {
+        if (cv.id === req.body.studentID) {
+          if (cv.hasOwnProperty('numbersOfProjects')) {
+            cv.numbersOfProjects += 1;
+          } else {
+            cv.numbersOfProjects = 1;
           }
-          acc.push(cv);
-          return acc;
-        }, []);
-        //aggiorno i projects
-        projects.push(newProject);
-        // scrivere su disco gli student
-        await writeStudents(newStudentsArray);
-        //scrivere su disco il progetto
-        await writeProjects(projects);
-        res.status(201).send(newProject.id);
-      } else {
-        const err = new Error();
-        err.httpStatusCode = 400;
-        err.errorList = errors;
-        next(err);
-      }
-    } catch (error) {
-      error.httpStatusCode = 500;
-      next(error);
+        }
+        acc.push(cv);
+        return acc;
+      }, []);
+      //aggiorno i projects
+      projects.push(newProject);
+      // scrivere su disco gli student
+      await writeStudents(newStudentsArray);
+      //scrivere su disco il progetto
+      await writeProjects(projects);
+      res.status(201).send(newProject.id);
+    } else {
+      const err = new Error();
+      err.httpStatusCode = 400;
+      err.errorList = errors;
+      next(err);
     }
-  }
+  })
 );
 
 // put project
