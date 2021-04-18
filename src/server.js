@@ -1,46 +1,47 @@
 import express from 'express';
-import studentsRouter from './students/index.js';
+import studentsRouter from './routes/students.js';
 import projectsRouter from './projects/index.js';
-import listEndpoints from 'express-list-endpoints';
+import colors from 'colors';
+// import listEndpoints from 'express-list-endpoints';
 import cors from 'cors';
+import morgan from 'morgan';
 import {
   notFoundErrorHandler,
   badRequestErrorHandling,
   catchAllErrorHandler,
   forbiddenErrorHandler,
   routeNotFoundHandler,
-} from './middlewares/errors/errorHandlers.js';
-import { getCurrentDirectory } from './lib/fs-tools.js';
+} from './middlewares/errorHandlers.js';
+import { getCurrentDirectory } from './utils/fsTools.js';
 import { join } from 'path';
 
-const server = express();
-const port = process.env.PORT || 3002;
+const app = express();
+
+//dev logging middleware
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 /* static file serving */
 const currentDirectory = getCurrentDirectory(import.meta.url);
 // console.log(currentDirectory);
 const publicDirectory = join(currentDirectory, '../public'); //prendo la direcorty delle foto nella pubblic
-server.use(express.static(publicDirectory)); //gli dico di usarla come static
-
-server.use(cors());
-server.use(express.json()); // così gli dico che i body sono json, altrimenti arrivanpo undefinded
+app.use(express.static(publicDirectory)); //gli dico di usarla come static
+app.use(cors());
+app.use(express.json()); // così gli dico che i body sono json, altrimenti arrivanpo undefinded
 //va prima dell'use sulle route
-server.use('/students', studentsRouter); //usa questa parte comune di path per tutti gli endpoint
-server.use('/projects', projectsRouter);
+app.use('/students', studentsRouter); //usa questa parte comune di path per tutti gli endpoint
+app.use('/projects', projectsRouter);
 
 /* Qui ci vanno gli error middlewares */
-server.use(notFoundErrorHandler);
-server.use(badRequestErrorHandling);
-server.use(forbiddenErrorHandler);
+app.use(notFoundErrorHandler);
+app.use(badRequestErrorHandling);
+app.use(forbiddenErrorHandler);
+app.use(catchAllErrorHandler);
+app.use(routeNotFoundHandler);
+// console.log(listEndpoints(app));
 
-server.use(catchAllErrorHandler);
-
-server.use(routeNotFoundHandler);
-// console.log(listEndpoints(server));
-
-server.listen(port, () => {
+const port = process.env.PORT || 3002;
+app.listen(port, () => {
   console.log(`🤸🏻‍♂️ server is running on port: ${port}`);
-});
-server.on('error', (error) => {
-  console.log(`🚫 server not running due to: ${error}`);
 });

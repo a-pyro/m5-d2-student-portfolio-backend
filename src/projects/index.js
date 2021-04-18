@@ -9,9 +9,9 @@ import {
   writeStudents,
   writeReviews,
   writeProjectPicture,
-} from '../lib/fs-tools.js';
+} from '../utils/fsTools.js';
 import multer from 'multer';
-import { checkFile } from '../middlewares/index.js';
+import { checkFile } from '../middlewares/checkFileMime.js';
 
 const upload = multer();
 
