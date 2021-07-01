@@ -16,7 +16,7 @@ const router = Router();
 
 router.route('/').get(getStudentsController).post(addStudentController);
 
-router.route('/checkEmail').post(checkEmailController);
+// router.route('/checkEmail').post(checkEmailController);
 
 router
   .route('/:id')
